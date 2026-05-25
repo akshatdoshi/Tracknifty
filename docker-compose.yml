@@ -1,0 +1,78 @@
+# Production-shaped stack: Postgres+TimescaleDB, Redis, FastAPI backend,
+# Celery worker + beat, and the React frontend behind nginx.
+#
+# The same backend image runs lightweight locally (SQLite + APScheduler) just by
+# changing env vars — see backend/.env.example.
+
+services:
+  db:
+    image: timescale/timescaledb:2.16.1-pg16
+    environment:
+      POSTGRES_USER: tracknifty
+      POSTGRES_PASSWORD: tracknifty
+      POSTGRES_DB: tracknifty
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tracknifty"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build: ./backend
+    environment: &backend_env
+      DATABASE_URL: postgresql+psycopg2://tracknifty:tracknifty@db:5432/tracknifty
+      REDIS_URL: redis://redis:6379/0
+      SCHEDULER: celery
+      ENABLE_SCHEDULER: "false"
+      PRICE_PROVIDER: auto
+      JWT_SECRET: change-me-to-a-long-random-string-at-least-32-bytes
+      MODEL_STORE: local
+    volumes:
+      - modelstore:/app/model_store
+    command: >
+      bash -c "python -m seed.seed_data &&
+               uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  worker:
+    build: ./backend
+    environment: *backend_env
+    volumes:
+      - modelstore:/app/model_store
+    command: celery -A app.celery_app worker --loglevel=info
+    depends_on:
+      - backend
+
+  beat:
+    build: ./backend
+    environment: *backend_env
+    command: celery -A app.celery_app beat --loglevel=info
+    depends_on:
+      - redis
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+  modelstore:
