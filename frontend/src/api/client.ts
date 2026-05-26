@@ -1,5 +1,6 @@
 import type {
   DataQuality,
+  FeatureVector,
   Portfolio,
   Rule,
   SignalRow,
@@ -66,6 +67,8 @@ export const api = {
   triggerScore: () => request<{ signals_written: number }>("/webhook/score", {
     method: "POST",
   }),
+  features: (portfolioId: number, ticker: string) =>
+    request<FeatureVector>(`/features/${portfolioId}/${ticker}`),
   dataQuality: () => request<DataQuality>("/ingestion/quality"),
   uploadTransactions: async (portfolioId: number, file: File) => {
     const form = new FormData();

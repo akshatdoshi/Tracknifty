@@ -57,3 +57,10 @@ export interface DataQuality {
   success_rate: number | null;
   by_source: Record<string, { last_updated: string; count: number }>;
 }
+
+export interface FeatureVector {
+  ticker: string;
+  as_of_date: string;
+  features: Record<string, number | null>;
+  context: Record<string, number | string | boolean | null>;
+}

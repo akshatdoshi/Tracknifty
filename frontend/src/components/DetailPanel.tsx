@@ -1,6 +1,7 @@
 import {
   Bar,
   BarChart,
+  CartesianGrid,
   Cell,
   ResponsiveContainer,
   Tooltip,
@@ -22,24 +23,28 @@ export function DetailPanel({ row }: { row: SignalRow }) {
   }));
 
   return (
-    <div className="grid grid-cols-1 gap-6 border-t border-slate-200 bg-slate-50 px-6 py-5 md:grid-cols-3">
+    <div className="grid grid-cols-1 gap-6 border-t border-slate-700 bg-slate-800 px-6 py-5 md:grid-cols-3">
       <div className="md:col-span-2">
-        <h4 className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
+        <h4 className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-400">
           Why this signal — SHAP drivers
         </h4>
-        <p className="mb-3 text-sm text-slate-700">{row.explanation || "No explanation available."}</p>
+        <p className="mb-3 text-sm text-slate-300">{row.explanation || "No explanation available."}</p>
         {chartData.length > 0 ? (
           <ResponsiveContainer width="100%" height={Math.max(120, chartData.length * 38)}>
             <BarChart layout="vertical" data={chartData} margin={{ left: 20, right: 30 }}>
+              <CartesianGrid stroke="#1e293b" />
               <XAxis type="number" hide domain={[0, 100]} />
               <YAxis
                 type="category"
                 dataKey="label"
                 width={180}
-                tick={{ fontSize: 12, fill: "#475569" }}
+                tick={{ fontSize: 12, fill: "#64748b" }}
               />
-              <Tooltip formatter={(v: number) => [`${v}%`, "Contribution"]} />
-              <Bar dataKey="value" radius={[0, 4, 4, 0]} label={{ position: "right", formatter: (v: number) => `${v}%`, fontSize: 11 }}>
+              <Tooltip
+                formatter={(v: number) => [`${v}%`, "Contribution"]}
+                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px', color: '#f1f5f9' }}
+              />
+              <Bar dataKey="value" radius={[0, 4, 4, 0]} label={{ position: "right", formatter: (v: number) => `${v}%`, fontSize: 11, fill: "#94a3b8" }}>
                 {chartData.map((entry, i) => (
                   <Cell
                     key={i}
@@ -48,7 +53,7 @@ export function DetailPanel({ row }: { row: SignalRow }) {
                         ? "#16a34a"
                         : entry.direction === "Negative"
                         ? "#dc2626"
-                        : "#94a3b8"
+                        : "#475569"
                     }
                   />
                 ))}
@@ -56,15 +61,15 @@ export function DetailPanel({ row }: { row: SignalRow }) {
             </BarChart>
           </ResponsiveContainer>
         ) : (
-          <p className="text-sm text-slate-400">No driver data — run scoring first.</p>
+          <p className="text-sm text-slate-500">No driver data — run scoring first.</p>
         )}
 
         {row.rule_notes.length > 0 && (
-          <div className="mt-3 rounded-md border border-amber-200 bg-amber-50 p-3">
-            <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-amber-700">
+          <div className="mt-3 rounded-md border border-amber-700/50 bg-amber-950/50 p-3">
+            <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-amber-300">
               Guardrails applied
             </div>
-            <ul className="list-inside list-disc space-y-0.5 text-xs text-amber-800">
+            <ul className="list-inside list-disc space-y-0.5 text-xs text-amber-300">
               {row.rule_notes.map((n, i) => (
                 <li key={i}>{n}</li>
               ))}
@@ -74,7 +79,7 @@ export function DetailPanel({ row }: { row: SignalRow }) {
       </div>
 
       <div>
-        <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+        <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
           Position summary
         </h4>
         <dl className="space-y-1.5 text-sm">
@@ -92,7 +97,7 @@ export function DetailPanel({ row }: { row: SignalRow }) {
             <Row label="Model (pre-rules)" value={row.raw_signal} />
           )}
         </dl>
-        <h4 className="mb-1 mt-4 text-xs font-semibold uppercase tracking-wide text-slate-500">
+        <h4 className="mb-1 mt-4 text-xs font-semibold uppercase tracking-wide text-slate-400">
           Weekly signal trace
         </h4>
         <SignalTrace trace={row.signal_trace} />
@@ -115,7 +120,7 @@ function Row({
       <dt className="text-slate-500">{label}</dt>
       <dd
         className={`font-medium tabular-nums ${
-          tone === "pos" ? "text-green-600" : tone === "neg" ? "text-red-600" : "text-slate-800"
+          tone === "pos" ? "text-green-400" : tone === "neg" ? "text-red-400" : "text-slate-200"
         }`}
       >
         {value}

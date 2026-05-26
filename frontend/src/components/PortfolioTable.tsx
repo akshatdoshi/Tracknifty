@@ -5,8 +5,8 @@ import { DetailPanel } from "./DetailPanel";
 import { SignalBadge } from "./SignalBadge";
 
 function pctClass(v: number | null) {
-  if (v === null || v === undefined) return "text-slate-400";
-  return v >= 0 ? "text-green-600" : "text-red-600";
+  if (v === null || v === undefined) return "text-slate-500";
+  return v >= 0 ? "text-green-400" : "text-red-400";
 }
 function pct(v: number | null) {
   return v === null || v === undefined ? "—" : `${v >= 0 ? "+" : ""}${v.toFixed(2)}%`;
@@ -23,16 +23,16 @@ export function PortfolioTable({
 
   if (!rows.length) {
     return (
-      <div className="rounded-lg border border-slate-200 bg-white p-10 text-center text-slate-500">
+      <div className="rounded-lg border border-slate-800 bg-slate-900 p-10 text-center text-slate-500">
         No holdings to display.
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
-      <table className="min-w-full divide-y divide-slate-200 text-sm">
-        <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
+    <div className="overflow-hidden rounded-lg border border-slate-800 bg-slate-900 shadow-sm">
+      <table className="min-w-full divide-y divide-slate-800 text-sm">
+        <thead className="bg-slate-800 text-left text-xs uppercase tracking-wide text-slate-400">
           <tr>
             <th className="px-6 py-3">Stock</th>
             {showPortfolio && <th className="px-4 py-3">Portfolio</th>}
@@ -43,31 +43,31 @@ export function PortfolioTable({
             <th className="px-4 py-3">Signal</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-100">
+        <tbody className="divide-y divide-slate-800">
           {rows.map((row) => {
             const key = `${row.portfolio_id}:${row.ticker}`;
             const open = openKey === key;
             return (
               <Fragment key={key}>
                 <tr
-                  className={`cursor-pointer hover:bg-slate-50 ${open ? "bg-slate-50" : ""}`}
+                  className={`cursor-pointer border-slate-800 hover:bg-slate-800/60 ${open ? "bg-slate-800/60" : ""}`}
                   onClick={() => setOpenKey(open ? null : key)}
                 >
                   <td className="px-6 py-3">
-                    <div className="font-medium text-slate-900">{row.ticker}</div>
+                    <div className="font-medium text-slate-100">{row.ticker}</div>
                     <div className="text-xs text-slate-500">{row.sector}</div>
                   </td>
                   {showPortfolio && (
-                    <td className="px-4 py-3 text-slate-600">{row.portfolio_name}</td>
+                    <td className="px-4 py-3 text-slate-300">{row.portfolio_name}</td>
                   )}
                   <td className="px-4 py-3">
                     <span
                       className={`tabular-nums ${
                         row.breach_max
-                          ? "rounded bg-red-100 px-1.5 py-0.5 font-medium text-red-700"
+                          ? "rounded bg-red-900/40 px-1.5 py-0.5 font-medium text-red-400"
                           : row.breach_min
-                          ? "rounded bg-amber-100 px-1.5 py-0.5 font-medium text-amber-700"
-                          : "text-slate-700"
+                          ? "rounded bg-amber-900/40 px-1.5 py-0.5 font-medium text-amber-400"
+                          : "text-slate-300"
                       }`}
                       title={
                         row.breach_max

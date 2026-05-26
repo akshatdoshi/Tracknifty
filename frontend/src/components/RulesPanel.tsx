@@ -44,14 +44,14 @@ export function RulesPanel({
   }
 
   return (
-    <div className="fixed inset-0 z-20 flex justify-end bg-black/30" onClick={onClose}>
+    <div className="fixed inset-0 z-20 flex justify-end bg-black/60" onClick={onClose}>
       <div
-        className="h-full w-full max-w-sm overflow-y-auto bg-white p-6 shadow-xl"
+        className="h-full w-full max-w-sm overflow-y-auto border-l border-slate-800 bg-slate-900 p-6 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-slate-900">Rules & Guardrails</h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
+        <div className="mb-6 flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-slate-100">Rules & Guardrails</h3>
+          <button onClick={onClose} className="text-slate-500 hover:text-slate-300">
             ✕
           </button>
         </div>
@@ -61,7 +61,7 @@ export function RulesPanel({
           <div className="space-y-4">
             {FIELDS.map((f) => (
               <label key={f.key} className="block">
-                <span className="text-sm font-medium text-slate-700">{f.label}</span>
+                <span className="text-sm font-medium text-slate-300">{f.label}</span>
                 <div className="mt-1 flex items-center gap-2">
                   <input
                     type="number"
@@ -70,35 +70,33 @@ export function RulesPanel({
                     onChange={(e) =>
                       setRule({ ...rule, [f.key]: parseFloat(e.target.value) })
                     }
-                    className="w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-slate-500 focus:outline-none"
+                    className="w-full rounded-md border border-slate-700 bg-slate-800 px-3 py-1.5 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none"
                   />
-                  <span className="text-sm text-slate-400">{f.suffix}</span>
+                  <span className="w-4 shrink-0 text-sm text-slate-500">{f.suffix}</span>
                 </div>
               </label>
             ))}
             <label className="flex items-center justify-between">
-              <span className="text-sm font-medium text-slate-700">
-                De-risk override
-              </span>
+              <span className="text-sm font-medium text-slate-300">De-risk override</span>
               <input
                 type="checkbox"
                 checked={rule.derisk_override}
                 onChange={(e) =>
                   setRule({ ...rule, derisk_override: e.target.checked })
                 }
-                className="h-4 w-4"
+                className="h-4 w-4 accent-indigo-500"
               />
             </label>
 
             <button
               onClick={save}
               disabled={saving}
-              className="w-full rounded-md bg-slate-900 py-2 text-sm font-semibold text-white hover:bg-slate-700 disabled:opacity-50"
+              className="w-full rounded-md bg-indigo-600 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-50"
             >
               {saving ? "Saving & re-scoring…" : "Save & re-score"}
             </button>
-            {msg && <p className="text-center text-sm text-slate-600">{msg}</p>}
-            <p className="text-xs text-slate-400">
+            {msg && <p className="text-center text-sm text-green-400">{msg}</p>}
+            <p className="text-xs text-slate-600">
               Changes take effect on the next scoring run — no deployment needed.
             </p>
           </div>
