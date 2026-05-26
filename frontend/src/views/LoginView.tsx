@@ -22,45 +22,48 @@ export function LoginView({ onLogin }: { onLogin: () => void }) {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-100">
-      <form
-        onSubmit={submit}
-        className="w-full max-w-sm rounded-xl border border-slate-200 bg-white p-8 shadow-sm"
-      >
-        <h1 className="text-xl font-bold text-slate-900">Tracknifty</h1>
-        <p className="mb-6 text-sm text-slate-500">BSH Recommendation Engine</p>
-
-        <label className="mb-3 block">
-          <span className="text-sm font-medium text-slate-700">Username</span>
-          <input
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
-          />
-        </label>
-        <label className="mb-5 block">
-          <span className="text-sm font-medium text-slate-700">Password</span>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
-          />
-        </label>
-
-        {error && <p className="mb-3 text-sm text-red-600">{error}</p>}
-
-        <button
-          type="submit"
-          disabled={busy}
-          className="w-full rounded-md bg-slate-900 py-2 text-sm font-semibold text-white hover:bg-slate-700 disabled:opacity-50"
+    <div className="flex min-h-screen items-center justify-center bg-slate-950">
+      <div className="w-full max-w-sm">
+        <div className="mb-8 text-center">
+          <div className="mb-2 text-3xl font-bold text-indigo-400">Tracknifty</div>
+          <div className="text-sm text-slate-500">AI-Driven BSH Recommendation Engine</div>
+        </div>
+        <form
+          onSubmit={submit}
+          className="rounded-xl border border-slate-800 bg-slate-900 p-8 shadow-2xl"
         >
-          {busy ? "Signing in…" : "Sign in"}
-        </button>
-        <p className="mt-4 text-center text-xs text-slate-400">
-          Demo: admin / admin123 · manager1 / manager123
-        </p>
-      </form>
+          <label className="mb-4 block">
+            <span className="text-sm font-medium text-slate-300">Username</span>
+            <input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="mt-1 w-full rounded-md border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+            />
+          </label>
+          <label className="mb-6 block">
+            <span className="text-sm font-medium text-slate-300">Password</span>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="mt-1 w-full rounded-md border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+            />
+          </label>
+
+          {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
+
+          <button
+            type="submit"
+            disabled={busy}
+            className="w-full rounded-md bg-indigo-600 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-50"
+          >
+            {busy ? "Signing in…" : "Sign in"}
+          </button>
+          <p className="mt-5 text-center text-xs text-slate-600">
+            admin / admin123 · manager1 / manager123 · manager2 / manager123
+          </p>
+        </form>
+      </div>
     </div>
   );
 }

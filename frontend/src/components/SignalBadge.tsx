@@ -1,9 +1,9 @@
 import type { SignalKind } from "../api/types";
 
 const STYLES: Record<SignalKind, string> = {
-  BUY: "bg-green-100 text-green-800 ring-green-600/30",
-  SELL: "bg-red-100 text-red-800 ring-red-600/30",
-  HOLD: "bg-amber-100 text-amber-800 ring-amber-600/30",
+  BUY: "bg-green-900/60 text-green-400 ring-green-500/30",
+  SELL: "bg-red-900/60 text-red-400 ring-red-500/30",
+  HOLD: "bg-amber-900/60 text-amber-400 ring-amber-500/30",
 };
 
 export function SignalBadge({ signal, small }: { signal: SignalKind; small?: boolean }) {
